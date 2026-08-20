@@ -1,0 +1,30 @@
+{
+  "name": "curso-auditor-accesibilidad-con-ia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Harness didáctico para aprender a construir un copiloto de auditoría WCAG-EM con IA.",
+  "type": "module",
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "setup": "playwright install chromium && node scripts/sync-skills.mjs",
+    "skills:sync": "node scripts/sync-skills.mjs",
+    "skills:check": "node scripts/sync-skills.mjs --check",
+    "audit:validate": "node scripts/validate-audit.mjs",
+    "audit:axe": "node scripts/run-axe.mjs",
+    "exercise:check": "node scripts/check-exercise.mjs",
+    "format": "biome format --write .",
+    "lint": "biome check .",
+    "test": "node --test",
+    "test:axe": "node scripts/run-axe.mjs test/fixtures/valid-audit --output test/.tmp/axe",
+    "check": "pnpm skills:check && pnpm lint && pnpm test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@biomejs/biome": "2.5.9",
+    "ajv": "8.20.0",
+    "playwright": "1.62.1"
+  }
+}

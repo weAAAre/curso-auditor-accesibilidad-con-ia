@@ -1,0 +1,7 @@
+node_modules/
+test/.tmp/
+audits/*/runs/
+audits/*/exports/*
+!audits/*/exports/.gitkeep
+.DS_Store
+

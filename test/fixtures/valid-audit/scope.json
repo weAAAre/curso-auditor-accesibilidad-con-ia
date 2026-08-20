@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "auditId": "valid-audit",
+  "product": {
+    "name": "Fixture técnica",
+    "description": "Dos estados de la página de inicio para comprobar el harness.",
+    "startUrl": "fixtures/demo-site/index.html"
+  },
+  "standard": {
+    "wcagVersion": "2.2",
+    "level": "AA"
+  },
+  "included": ["Inicio y navegación desplegada"],
+  "excluded": [],
+  "baseline": ["Chromium de escritorio a 1280 × 720"],
+  "assumptions": [],
+  "openQuestions": [],
+  "status": "approved",
+  "approvedBy": "Prueba automatizada",
+  "approvedAt": "2026-08-20T12:00:00Z"
+}

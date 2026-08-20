@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sample.schema.json",
+  "title": "Selección de vistas para evaluar",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "auditId",
+    "decision",
+    "reason",
+    "views",
+    "completeProcesses",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "auditId": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "decision": { "enum": ["entire-product", "representative-sample"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "views": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "viewId", "name", "path", "state", "selection", "actions"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "viewId": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "name": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "pattern": "^/" },
+          "state": { "type": "string", "minLength": 1 },
+          "selection": { "enum": ["structured", "random", "entire-product"] },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "selector"],
+              "properties": {
+                "type": { "const": "click" },
+                "selector": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "completeProcesses": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "status": { "enum": ["draft", "approved"] },
+    "approvedBy": { "type": "string", "minLength": 1 },
+    "approvedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "approved" } } },
+      "then": { "required": ["approvedBy", "approvedAt"] }
+    }
+  ]
+}
