@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "auditId": "valid-audit",
+  "findings": [
+    {
+      "id": "image-without-alt",
+      "status": "confirmed",
+      "criterion": "1.1.1",
+      "title": "Una imagen no tiene alternativa textual",
+      "impact": "serious",
+      "impactDescription": "La información de la imagen no llega a quien no puede verla.",
+      "sampleIds": ["home-default"],
+      "stepsToReproduce": ["Abrir la página de inicio.", "Revisar el árbol accesible."],
+      "expected": "La imagen comunica su propósito mediante una alternativa adecuada.",
+      "observed": "La imagen no expone una alternativa textual.",
+      "evidence": [
+        {
+          "type": "axe",
+          "reference": "runs/example/axe/home-default.json",
+          "description": "Resultado técnico usado para probar el contrato."
+        }
+      ],
+      "sources": ["https://www.w3.org/TR/WCAG22/#non-text-content"]
+    }
+  ]
+}

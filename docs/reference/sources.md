@@ -5,7 +5,12 @@ decisión dependa de ellas.
 
 - [WCAG Evaluation Methodology 2.0](https://www.w3.org/TR/wcag-em-2/)
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
+- [Understanding WCAG 2.2](https://www.w3.org/WAI/WCAG22/Understanding/)
+- [Techniques for WCAG 2.2](https://www.w3.org/WAI/WCAG22/Techniques/)
+- [ACT Rules](https://www.w3.org/WAI/standards-guidelines/act/rules/)
 - [ACT Rules Format 1.1](https://www.w3.org/TR/act-rules-format/)
+- [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/)
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [Axe-core](https://github.com/dequelabs/axe-core)
 - [API de axe-core](https://github.com/dequelabs/axe-core/blob/develop/doc/API.md)
 - [Agent Browser](https://agent-browser.dev/)

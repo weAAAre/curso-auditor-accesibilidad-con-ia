@@ -9,6 +9,8 @@ const artifactSchemas = {
   "scope.json": "scope.schema.json",
   "inventory.json": "inventory.schema.json",
   "sample.json": "sample.schema.json",
+  "coverage.json": "coverage.schema.json",
+  "findings.json": "findings.schema.json",
 };
 
 export async function readJson(file) {
@@ -129,6 +131,42 @@ export async function validateAudit(auditDirectory, required = []) {
       if (random < Math.ceil(structured * 0.1)) {
         errors.push(
           "sample.json: la selección aleatoria debe ser al menos el 10% de la estructurada.",
+        );
+      }
+    }
+  }
+
+  const coverage = artifacts["coverage.json"];
+  if (coverage) {
+    const criterionIds = new Set();
+    for (const criterion of coverage.criteria ?? []) {
+      if (criterionIds.has(criterion.id)) {
+        errors.push(`coverage.json: criterio duplicado ${criterion.id}.`);
+      }
+      criterionIds.add(criterion.id);
+    }
+  }
+
+  const findings = artifacts["findings.json"];
+  if (findings) {
+    const findingIds = new Set();
+    for (const finding of findings.findings ?? []) {
+      if (findingIds.has(finding.id)) {
+        errors.push(`findings.json: hallazgo duplicado ${finding.id}.`);
+      }
+      findingIds.add(finding.id);
+
+      const coveredCriterion = coverage?.criteria?.find(
+        (criterion) => criterion.id === finding.criterion,
+      );
+      if (coverage && !coveredCriterion) {
+        errors.push(
+          `findings.json: el criterio ${finding.criterion} no aparece en coverage.json.`,
+        );
+      }
+      if (finding.status === "confirmed" && coveredCriterion?.outcome !== "failed") {
+        errors.push(
+          `findings.json: el hallazgo confirmado ${finding.id} necesita resultado failed en coverage.json.`,
         );
       }
     }

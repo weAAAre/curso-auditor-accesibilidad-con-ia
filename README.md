@@ -15,6 +15,12 @@ En la primera sesión tu equipo conseguirá:
 2. Dibujar el mapa de la experiencia y decidir qué vistas revisar.
 3. Ejecutar una primera inspección automática con Axe y conservar la evidencia.
 
+En la segunda sesión continuará hasta:
+
+4. Planificar cómo se evaluará cada criterio aplicable.
+5. Ejecutar pruebas manuales especializadas con skills reutilizables.
+6. Consolidar hallazgos y producir un informe accesible y exportable.
+
 El resultado no certifica conformidad WCAG. Es el comienzo trazable y
 reproducible de una auditoría profesional.
 

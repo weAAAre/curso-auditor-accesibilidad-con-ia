@@ -41,6 +41,11 @@ auditoría**, no un certificador automático de conformidad.
 - Conserva los resultados brutos. No conviertas automáticamente una violación
   de Axe en un hallazgo confirmado.
 - `passes` no significa conformidad y `incomplete` requiere revisión humana.
+- Las pruebas manuales actualizan `coverage.json` usando únicamente `passed`,
+  `failed`, `inapplicable`, `cantTell` o `untested` y conservan la evidencia que
+  justifica el resultado.
+- `findings.json` es la fuente canónica de hallazgos. Los informes y
+  exportaciones se derivan de ella y no añaden conclusiones nuevas.
 - Alcance, muestra y hallazgos finales requieren una decisión humana explícita.
 
 ## Límites

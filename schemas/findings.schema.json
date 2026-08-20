@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "findings.schema.json",
+  "title": "Hallazgos de accesibilidad",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "auditId", "findings"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "auditId": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "criterion",
+          "title",
+          "impact",
+          "impactDescription",
+          "sampleIds",
+          "stepsToReproduce",
+          "expected",
+          "observed",
+          "evidence",
+          "sources"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "status": { "enum": ["confirmed", "needs-review", "dismissed"] },
+          "criterion": {
+            "type": "string",
+            "pattern": "^[1-4]\\.[1-9]\\.[0-9]+$"
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "impact": { "enum": ["critical", "serious", "moderate", "minor"] },
+          "impactDescription": { "type": "string", "minLength": 1 },
+          "sampleIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
+          "stepsToReproduce": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "expected": { "type": "string", "minLength": 1 },
+          "observed": { "type": "string", "minLength": 1 },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "reference", "description"],
+              "properties": {
+                "type": { "enum": ["axe", "snapshot", "screenshot", "note"] },
+                "reference": { "type": "string", "minLength": 1 },
+                "description": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
+          "recommendation": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

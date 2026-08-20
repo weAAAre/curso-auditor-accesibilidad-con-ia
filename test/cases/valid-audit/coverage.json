@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "auditId": "valid-audit",
+  "criteria": [
+    {
+      "id": "1.1.1",
+      "title": "Contenido no textual",
+      "level": "A",
+      "applicability": "applicable",
+      "outcome": "failed",
+      "methods": [{ "type": "automatic", "name": "Axe Core" }],
+      "sampleIds": ["home-default"],
+      "evidence": ["runs/example/axe/home-default.json"],
+      "notes": ["Caso técnico para validar el contrato."]
+    }
+  ]
+}
