@@ -1,6 +1,6 @@
-# Auditoría demo
+# Auditoría de clase
 
-Este expediente comienza únicamente con el encargo. Los documentos de alcance,
+Este expediente comienza únicamente con el encargo común. Los documentos de alcance,
 mapa y selección deben aparecer al completar los ejercicios; no los escribas a
 mano si estás participando en el curso.
 

@@ -3,7 +3,7 @@ import path from "node:path";
 import { findMatchingSkills, validateAudit } from "./audit-lib.mjs";
 
 const exercise = Number(process.argv[2]);
-const directory = process.argv[3] ?? "audits/demo";
+const directory = process.argv[3] ?? "audits/class";
 const configuration = {
   1: { files: ["scope.json"], terms: ["scope.json"] },
   2: {

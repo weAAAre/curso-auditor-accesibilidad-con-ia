@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "auditId": "valid-audit",
   "decision": "entire-product",
-  "reason": "La fixture técnica solo contiene una vista con dos estados.",
+  "reason": "El caso técnico comprueba una vista pública.",
   "views": [
     {
       "id": "home-default",
@@ -12,15 +12,6 @@
       "stateId": "default",
       "selection": "entire-product",
       "actions": []
-    },
-    {
-      "id": "home-menu-open",
-      "viewId": "home",
-      "name": "Inicio con Más opciones abierto",
-      "path": "/",
-      "stateId": "menu-open",
-      "selection": "entire-product",
-      "actions": [{ "type": "click", "selector": "#menu-toggle" }]
     }
   ],
   "completeProcesses": [],

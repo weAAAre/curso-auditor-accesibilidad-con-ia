@@ -2,13 +2,13 @@
 
 ## Skill de alcance
 
-- Caso normal: `audits/demo/brief.md`.
+- Caso normal: `audits/class/brief.md`.
 - Caso límite: encargo sin estándar, nivel ni exclusiones.
 - Caso negativo: petición de “pasar Axe”; la skill no debería activarse.
 
 ## Skill de mapa y selección
 
-- Caso normal: la fixture del curso.
+- Caso normal: la web pública de CityLights indicada en el alcance.
 - Caso límite: producto pequeño; debe contemplar evaluar el conjunto completo.
 - Caso negativo: no existe alcance aprobado; debe detenerse.
 

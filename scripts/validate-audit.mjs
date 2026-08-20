@@ -1,6 +1,6 @@
 import { validateAudit } from "./audit-lib.mjs";
 
-const directory = process.argv[2] ?? "audits/demo";
+const directory = process.argv[2] ?? "audits/class";
 const result = await validateAudit(directory);
 
 if (Object.keys(result.artifacts).length === 0) {

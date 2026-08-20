@@ -18,7 +18,7 @@ y explicar qué necesita revisión humana.
 ## Al terminar debéis poder enseñar
 
 - La nueva skill en `skills/`.
-- Una ejecución dentro de `audits/demo/runs/`.
+- Una ejecución dentro de `audits/class/runs/`.
 - El manifiesto que identifica `agent-browser`, Axe Core, navegador, versiones,
   vistas y hora.
 - La diferencia entre `violations`, `incomplete`, `passes` e `inapplicable`.
@@ -34,8 +34,8 @@ y explicar qué necesita revisión humana.
 ## Ejecución y comprobación
 
 ```bash
-pnpm audit:axe audits/demo
-pnpm exercise:check 3 audits/demo
+pnpm audit:axe audits/class
+pnpm exercise:check 3 audits/class
 ```
 
 **Extra:** elegid un resultado `incomplete` y redactad la pregunta de revisión

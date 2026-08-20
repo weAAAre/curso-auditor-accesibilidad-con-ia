@@ -41,10 +41,10 @@ Después abre esta carpeta con Codex o Claude Code y comienza por
 ## Comandos de apoyo
 
 ```bash
-pnpm exercise:check 1 audits/demo
-pnpm exercise:check 2 audits/demo
-pnpm audit:axe audits/demo
-pnpm exercise:check 3 audits/demo
+pnpm exercise:check 1 audits/class
+pnpm exercise:check 2 audits/class
+pnpm audit:axe audits/class
+pnpm exercise:check 3 audits/class
 ```
 
 Si algo falla, el mensaje explica qué pieza falta. No hace falta abrir ni
@@ -57,10 +57,13 @@ docs/        fichas del curso y referencias
 skills/      fuente canónica de las skills
 scripts/     operaciones repetibles del harness
 schemas/     contratos de los documentos de auditoría
-fixtures/    producto local común para practicar
 audits/      un expediente independiente por auditoría
-evals/       escenarios y rúbrica para probar las skills
+evals/       casos y rúbrica para probar las skills
 ```
+
+El producto común de la clase es la web pública de
+[CityLights](https://weaaare.github.io/curso-auditor-accesibilidad-con-ia/).
+No hay que arrancar servidores ni abrir una web incluida en el repositorio.
 
 `skills/agent-browser/` contiene la skill oficial de descubrimiento. Sus
 instrucciones operativas se cargan desde la propia CLI para que siempre

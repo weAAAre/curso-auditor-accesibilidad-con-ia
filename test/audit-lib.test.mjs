@@ -6,7 +6,7 @@ import test from "node:test";
 import { root, validateAudit } from "../scripts/audit-lib.mjs";
 
 test("acepta un expediente válido", async () => {
-  const result = await validateAudit(path.join(root, "test/fixtures/valid-audit"), [
+  const result = await validateAudit(path.join(root, "test/cases/valid-audit"), [
     "scope.json",
     "inventory.json",
     "sample.json",
@@ -15,7 +15,7 @@ test("acepta un expediente válido", async () => {
 });
 
 test("rechaza una selección completa etiquetada como muestra", async () => {
-  const source = path.join(root, "test/fixtures/valid-audit");
+  const source = path.join(root, "test/cases/valid-audit");
   const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "a11y-audit-"));
   const auditDirectory = path.join(temporaryRoot, "valid-audit");
   await import("node:fs/promises").then(({ cp }) =>

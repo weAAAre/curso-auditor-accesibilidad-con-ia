@@ -9,14 +9,7 @@
       "path": "/",
       "kind": "Página de entrada",
       "essential": true,
-      "states": [
-        { "id": "default", "name": "Estado inicial" },
-        {
-          "id": "menu-open",
-          "name": "Más opciones abierto",
-          "trigger": "Activar Más opciones"
-        }
-      ]
+      "states": [{ "id": "default", "name": "Estado inicial" }]
     }
   ],
   "processes": []

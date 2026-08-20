@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "auditId": "valid-audit",
   "product": {
-    "name": "Fixture técnica",
-    "description": "Dos estados de la página de inicio para comprobar el harness.",
-    "startUrl": "fixtures/demo-site/index.html"
+    "name": "CityLights",
+    "description": "Página pública usada para comprobar el harness.",
+    "startUrl": "https://weaaare.github.io/curso-auditor-accesibilidad-con-ia/"
   },
   "standard": {
     "wcagVersion": "2.2",

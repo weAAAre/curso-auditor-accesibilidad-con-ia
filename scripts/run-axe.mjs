@@ -1,7 +1,6 @@
 import { execFile } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import { root, validateAudit } from "./audit-lib.mjs";
 
@@ -35,7 +34,7 @@ const args = process.argv.slice(2);
 const outputIndex = args.indexOf("--output");
 const requestedOutput = outputIndex >= 0 ? args[outputIndex + 1] : undefined;
 if (outputIndex >= 0) args.splice(outputIndex, 2);
-const auditDirectory = path.resolve(args[0] ?? "audits/demo");
+const auditDirectory = path.resolve(args[0] ?? "audits/class");
 
 const validation = await validateAudit(auditDirectory, [
   "scope.json",
@@ -57,13 +56,21 @@ if (scope.status !== "approved" || sample.status !== "approved") {
   process.exit(1);
 }
 
-const fixtureRoot = path.join(root, "fixtures", "demo-site");
 const runId = new Date().toISOString().replaceAll(":", "-").replaceAll(".", "-");
 const outputDirectory = path.resolve(
   requestedOutput ?? path.join(auditDirectory, "runs", runId),
 );
 const axeDirectory = path.join(outputDirectory, "axe");
 const packageJson = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
+const productRoot = new URL(scope.product.startUrl);
+if (!["http:", "https:"].includes(productRoot.protocol)) {
+  throw new Error("product.startUrl debe ser una URL pública http o https.");
+}
+productRoot.hash = "";
+productRoot.search = "";
+if (!productRoot.pathname.endsWith("/")) {
+  productRoot.pathname = productRoot.pathname.replace(/[^/]+$/, "");
+}
 
 let session;
 try {
@@ -76,14 +83,18 @@ try {
   let axeVersion = "unknown";
 
   for (const [index, selected] of sample.views.entries()) {
-    const relativePath =
-      selected.path === "/" ? "index.html" : selected.path.replace(/^\/+/, "");
-    const localFile = path.resolve(fixtureRoot, relativePath);
-    if (!localFile.startsWith(`${fixtureRoot}${path.sep}`)) {
-      throw new Error(`La vista ${selected.id} sale de la fixture permitida.`);
+    const relativePath = selected.path === "/" ? "" : selected.path.replace(/^\/+/, "");
+    const targetUrl = new URL(relativePath, productRoot);
+    if (
+      targetUrl.origin !== productRoot.origin ||
+      !targetUrl.pathname.startsWith(productRoot.pathname)
+    ) {
+      throw new Error(
+        `La vista ${selected.id} sale del producto definido en el alcance.`,
+      );
     }
 
-    await runAgentBrowser(["--session", session, "open", pathToFileURL(localFile).href]);
+    await runAgentBrowser(["--session", session, "open", targetUrl.href]);
     if (index === 0) {
       await runAgentBrowser(["--session", session, "set", "viewport", "1280", "720"]);
       const browserIdentity = await runAgentBrowser([

@@ -15,12 +15,6 @@
       "preset": "recommended"
     }
   },
-  "overrides": [
-    {
-      "includes": ["fixtures/demo-site/**"],
-      "linter": { "enabled": false }
-    }
-  ],
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
