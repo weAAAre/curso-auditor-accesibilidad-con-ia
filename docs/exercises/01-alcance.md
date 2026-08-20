@@ -35,9 +35,3 @@ tomar buenas decisiones y reconoce la información que todavía falta.
 
 **Extra:** probad la skill con un encargo de una sola frase. Una buena skill no
 debería rellenar los huecos inventando datos.
-
-## Pausa humana
-
-Es correcto que la primera versión quede como borrador. El equipo debe leerla,
-resolver las preguntas que cambien el encargo y decir explícitamente si la
-aprueba. La autorización para aprobar no equivale a una aprobación automática.
