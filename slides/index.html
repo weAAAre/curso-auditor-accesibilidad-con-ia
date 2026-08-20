@@ -92,6 +92,14 @@
         letter-spacing: -0.065em;
       }
 
+      .hero-title {
+        max-width: 15ch;
+        margin-bottom: 1.2rem;
+        font-size: clamp(3rem, 7.2vw, 8.2rem);
+        line-height: 0.93;
+        letter-spacing: -0.065em;
+      }
+
       h2 {
         max-width: 18ch;
         margin-bottom: clamp(1.4rem, 4vh, 3.2rem);
@@ -497,11 +505,12 @@
   </head>
   <body>
     <main id="deck" aria-label="Presentación del curso">
+      <h1 class="sr-only">Auditor de accesibilidad con IA — Clase 1</h1>
       <section class="slide active" data-title="Empezamos">
         <p class="eyebrow">Auditor de accesibilidad con IA · Clase 1</p>
         <div class="content split-wide">
           <div>
-            <h1>Entrad al repositorio</h1>
+            <h2 class="hero-title">Entrad al repositorio</h2>
             <p class="lead">Descargad la carpeta, abridla en Codex o Claude Code y escribid:</p>
           </div>
           <div>
