@@ -39,6 +39,11 @@ permiso para instalar una herramienta, aprueba únicamente esa operación.
 Cuando termine, comienza por
 [`docs/exercises/01-alcance.md`](docs/exercises/01-alcance.md).
 
+## Presentación de clase
+
+Abre [`slides/index.html`](slides/index.html) en el navegador. Avanza y vuelve
+con las flechas del teclado; pulsa `F` para entrar o salir de pantalla completa.
+
 ## Mapa del repositorio
 
 ```text

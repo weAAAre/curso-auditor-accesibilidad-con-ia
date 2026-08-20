@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auditor de accesibilidad con IA — Clase 1</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #fafaf7;
+        --ink: #111111;
+        --muted: #666666;
+        --line: #111111;
+        --pad-x: clamp(2rem, 6vw, 7rem);
+        --pad-y: clamp(1.75rem, 5vh, 4.5rem);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--paper);
+      }
+
+      body {
+        font-size: clamp(1.15rem, 1.75vw, 2rem);
+        line-height: 1.32;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-thickness: 0.12em;
+        text-underline-offset: 0.18em;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 4px solid var(--ink);
+        outline-offset: 4px;
+      }
+
+      .slide {
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        padding: var(--pad-y) var(--pad-x);
+        overflow: auto;
+      }
+
+      .slide.active {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: clamp(1rem, 3vh, 2.5rem);
+      }
+
+      .eyebrow {
+        margin: 0;
+        font-size: clamp(0.8rem, 1vw, 1.05rem);
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .content {
+        width: min(100%, 92rem);
+        align-self: center;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 15ch;
+        margin-bottom: 1.2rem;
+        font-size: clamp(3rem, 7.2vw, 8.2rem);
+        line-height: 0.93;
+        letter-spacing: -0.065em;
+      }
+
+      h2 {
+        max-width: 18ch;
+        margin-bottom: clamp(1.4rem, 4vh, 3.2rem);
+        font-size: clamp(2.4rem, 5vw, 5.8rem);
+        line-height: 0.98;
+        letter-spacing: -0.052em;
+      }
+
+      h3 {
+        margin-bottom: 0.7rem;
+        font-size: clamp(1.2rem, 1.6vw, 1.9rem);
+        line-height: 1.1;
+      }
+
+      .lead {
+        max-width: 42ch;
+        font-size: clamp(1.35rem, 2.2vw, 2.65rem);
+        line-height: 1.2;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .small {
+        font-size: clamp(0.92rem, 1.15vw, 1.28rem);
+      }
+
+      .giant-number {
+        font-size: clamp(6rem, 17vw, 18rem);
+        font-weight: 900;
+        line-height: 0.72;
+        letter-spacing: -0.09em;
+      }
+
+      ul,
+      ol {
+        max-width: 48ch;
+        margin: 0;
+        padding-left: 1.25em;
+      }
+
+      li + li {
+        margin-top: 0.55em;
+      }
+
+      code,
+      pre,
+      .mono {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      }
+
+      code {
+        padding: 0.08em 0.28em;
+        border: 1px solid currentColor;
+        font-size: 0.88em;
+      }
+
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-size: clamp(0.78rem, 1.18vw, 1.35rem);
+        line-height: 1.42;
+      }
+
+      .terminal {
+        padding: clamp(1.2rem, 2.4vw, 2.4rem);
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .terminal .prompt::before {
+        content: "> ";
+        font-weight: 800;
+      }
+
+      .panel {
+        padding: clamp(1.1rem, 2vw, 2rem);
+        border: 2px solid var(--line);
+      }
+
+      .panel.black {
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .grid-2,
+      .grid-3 {
+        display: grid;
+        gap: clamp(1rem, 2.4vw, 2.4rem);
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .split-wide {
+        display: grid;
+        grid-template-columns: minmax(18rem, 0.85fr) minmax(24rem, 1.35fr);
+        gap: clamp(1.5rem, 5vw, 6rem);
+        align-items: center;
+      }
+
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.7rem;
+        font-size: clamp(1rem, 1.55vw, 1.8rem);
+        font-weight: 750;
+      }
+
+      .flow span {
+        padding: 0.55em 0.7em;
+        border: 2px solid var(--line);
+      }
+
+      .flow b {
+        font-size: 1.3em;
+      }
+
+      .flow .future {
+        border-color: #888888;
+        color: #666666;
+      }
+
+      .compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 2px solid var(--line);
+      }
+
+      .compare > div {
+        padding: clamp(1.2rem, 2.4vw, 2.5rem);
+      }
+
+      .compare > div + div {
+        border-left: 2px solid var(--line);
+      }
+
+      .label {
+        display: inline-block;
+        margin-bottom: 1rem;
+        padding: 0.35em 0.55em;
+        background: var(--ink);
+        color: var(--paper);
+        font-size: clamp(0.75rem, 0.9vw, 1rem);
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .file-list {
+        display: grid;
+        grid-template-columns: minmax(18rem, 0.85fr) minmax(25rem, 1.3fr);
+        gap: clamp(1.4rem, 4vw, 5rem);
+        align-items: start;
+      }
+
+      .file-list dl {
+        display: grid;
+        grid-template-columns: minmax(10rem, 0.7fr) minmax(16rem, 1.4fr);
+        gap: 0.75rem 1.2rem;
+        margin: 0;
+        font-size: clamp(0.88rem, 1.15vw, 1.32rem);
+      }
+
+      .file-list dt {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-weight: 800;
+      }
+
+      .file-list dd {
+        margin: 0;
+      }
+
+      .exercise {
+        display: grid;
+        grid-template-columns: minmax(8rem, 0.35fr) minmax(30rem, 1.65fr);
+        gap: clamp(2rem, 6vw, 7rem);
+        align-items: center;
+      }
+
+      .exercise-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .exercise-meta span {
+        padding: 0.35em 0.6em;
+        border: 2px solid var(--line);
+        font-size: clamp(0.72rem, 0.9vw, 1rem);
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .quote {
+        max-width: 32ch;
+        padding-left: 1em;
+        border-left: 0.18em solid var(--line);
+        font-size: clamp(1.5rem, 2.6vw, 3rem);
+        font-weight: 720;
+        line-height: 1.15;
+      }
+
+      .footer {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: clamp(0.72rem, 0.9vw, 0.98rem);
+      }
+
+      .progress-track {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 5px;
+        background: #ddddda;
+      }
+
+      .progress-bar {
+        width: 0;
+        height: 100%;
+        background: var(--ink);
+      }
+
+      .controls {
+        position: fixed;
+        right: 1rem;
+        bottom: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0.18;
+        transition: opacity 120ms ease;
+      }
+
+      .controls:hover,
+      .controls:focus-within {
+        opacity: 1;
+      }
+
+      .controls button {
+        width: 2.8rem;
+        height: 2.8rem;
+        border: 2px solid var(--line);
+        background: var(--paper);
+        color: var(--ink);
+        font: inherit;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+
+      .key-help {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem 1rem;
+        color: var(--muted);
+        font-size: clamp(0.75rem, 0.92vw, 1rem);
+      }
+
+      kbd {
+        padding: 0.12em 0.4em;
+        border: 1px solid currentColor;
+        border-bottom-width: 3px;
+        background: transparent;
+        color: inherit;
+        font-family: inherit;
+        font-size: 0.9em;
+      }
+
+      @media (max-width: 900px) {
+        .grid-2,
+        .grid-3,
+        .split-wide,
+        .file-list,
+        .exercise {
+          grid-template-columns: 1fr;
+        }
+
+        .compare {
+          grid-template-columns: 1fr;
+        }
+
+        .compare > div + div {
+          border-top: 2px solid var(--line);
+          border-left: 0;
+        }
+
+        .giant-number {
+          font-size: 5rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto;
+          transition: none;
+        }
+      }
+
+      @media print {
+        html,
+        body {
+          height: auto;
+          overflow: visible;
+        }
+
+        .slide,
+        .slide.active {
+          display: grid;
+          width: 100%;
+          height: 100vh;
+          break-after: page;
+        }
+
+        .controls,
+        .progress-track {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="deck" aria-label="Presentación del curso">
+      <section class="slide active" data-title="Empezamos">
+        <p class="eyebrow">Auditor de accesibilidad con IA · Clase 1</p>
+        <div class="content split-wide">
+          <div>
+            <h1>Entrad al repositorio</h1>
+            <p class="lead">Descargad la carpeta, abridla en Codex o Claude Code y escribid:</p>
+          </div>
+          <div>
+            <div class="terminal">
+              <p class="prompt mono">Inicializa el proyecto</p>
+            </div>
+            <p class="small" style="margin-top: 1.25rem">
+              <a href="https://github.com/weAAAre/curso-auditor-accesibilidad-con-ia/">
+                github.com/weAAAre/curso-auditor-accesibilidad-con-ia
+              </a>
+            </p>
+            <p class="small muted">Mientras el agente prepara el entorno, empezamos la teoría.</p>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="key-help">
+            <span><kbd>→</kbd> avanzar</span><span><kbd>←</kbd> volver</span>
+            <span><kbd>F</kbd> pantalla completa</span>
+          </div>
+          <span class="counter">01 / 19</span>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Objetivo">
+        <p class="eyebrow">El resultado de hoy</p>
+        <div class="content">
+          <h2>La primera mitad de un auditor profesional</h2>
+          <div class="grid-3">
+            <div class="panel"><h3>Entender</h3><p>Alcance, producto, vistas, estados y procesos.</p></div>
+            <div class="panel"><h3>Decidir</h3><p>Una muestra defendible siguiendo WCAG-EM 2.0.</p></div>
+            <div class="panel black"><h3>Ejecutar</h3><p>Axe sobre la muestra y conservar su evidencia bruta.</p></div>
+          </div>
+          <p class="quote" style="margin-top: 2rem">Construimos un copiloto de auditoría, no un certificador automático.</p>
+        </div>
+        <div class="footer"><span>Objetivo</span><span class="counter">02 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Camino completo">
+        <p class="eyebrow">El camino completo</p>
+        <div class="content">
+          <h2>De una petición a un entregable</h2>
+          <div class="flow" role="img" aria-label="Flujo completo de la auditoría">
+            <span>Alcance</span><b>→</b><span>Exploración</span><b>→</b><span>Muestra</span><b>→</b><span>Axe</span><b>→</b>
+            <span class="future">Pruebas manuales</span><b class="muted">→</b><span class="future">Hallazgos</span><b class="muted">→</b><span class="future">Informe</span>
+          </div>
+          <div class="grid-2" style="margin-top: 2.5rem">
+            <p><strong>Hoy:</strong> desde el alcance hasta el primer radar automático.</p>
+            <p class="muted"><strong>Siguiente clase:</strong> cobertura, pruebas manuales y entrega.</p>
+          </div>
+        </div>
+        <div class="footer"><span>Proceso</span><span class="counter">03 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="WCAG-EM">
+        <p class="eyebrow">La metodología</p>
+        <div class="content split-wide">
+          <div>
+            <h2>WCAG-EM 2.0</h2>
+            <p class="lead">Cinco pasos para que una auditoría sea trazable y repetible.</p>
+          </div>
+          <ol>
+            <li>Definir el alcance.</li>
+            <li>Explorar el producto digital.</li>
+            <li>Seleccionar una muestra representativa.</li>
+            <li>Evaluar la muestra seleccionada.</li>
+            <li>Reportar los resultados.</li>
+          </ol>
+        </div>
+        <div class="footer"><span>WCAG-EM organiza la evaluación · WCAG 2.2 define los requisitos</span><span class="counter">04 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Proyecto">
+        <p class="eyebrow">Concepto 1</p>
+        <div class="content split-wide">
+          <div>
+            <h2>Un proyecto es una carpeta</h2>
+            <p class="lead">Los nombres y la ubicación de los archivos hacen que el agente sepa qué leer y cuándo.</p>
+          </div>
+          <div class="panel">
+            <pre>mi-proyecto/
+├── AGENTS.md
+├── CLAUDE.md
+├── skills/
+├── docs/
+├── scripts/
+└── audits/</pre>
+          </div>
+        </div>
+        <div class="footer"><span>Convenciones + contexto + herramientas</span><span class="counter">05 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Demo AGENTS">
+        <p class="eyebrow">Demo 1 · Regla permanente</p>
+        <div class="content">
+          <h2><code>AGENTS.md</code> y <code>CLAUDE.md</code></h2>
+          <div class="grid-2">
+            <div>
+              <span class="label">AGENTS.md · Codex</span>
+              <div class="terminal"><pre>Responde siempre en español.
+Termina todas tus respuestas con 🥔</pre></div>
+            </div>
+            <div>
+              <span class="label">CLAUDE.md · Claude Code</span>
+              <div class="terminal"><pre>Responde siempre en español.
+Termina todas tus respuestas con 🥔</pre></div>
+            </div>
+          </div>
+          <p class="quote" style="margin-top: 2rem">Se aplica automáticamente a todas las tareas dentro de esa carpeta.</p>
+        </div>
+        <div class="footer"><span>Pregunta de prueba: «¿Qué es WCAG-EM?»</span><span class="counter">06 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Demo Skill">
+        <p class="eyebrow">Demo 2 · Procedimiento bajo demanda</p>
+        <div class="content split-wide">
+          <div>
+            <h2>Una skill sabe hacer una tarea</h2>
+            <div class="panel">
+              <pre>skills/resumen-patata/
+└── SKILL.md</pre>
+            </div>
+          </div>
+          <div class="terminal">
+            <pre>---
+name: resumen-patata
+description: Resume un texto cuando se lo pidan.
+---
+
+Resume en tres ideas claras.
+Termina el resumen con 🥔</pre>
+          </div>
+        </div>
+        <div class="footer"><span>Invocación: <code>$resumen-patata Resume este texto</code></span><span class="counter">07 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Diferencia">
+        <p class="eyebrow">La diferencia importante</p>
+        <div class="content">
+          <h2>Siempre activo vs. cuando hace falta</h2>
+          <div class="compare">
+            <div>
+              <span class="label">AGENTS / CLAUDE</span>
+              <h3>Reglas permanentes</h3>
+              <ul>
+                <li>Se cargan por ubicación.</li>
+                <li>Afectan a todo el proyecto.</li>
+                <li>Propósito, límites y convenciones.</li>
+              </ul>
+            </div>
+            <div>
+              <span class="label">Skill</span>
+              <h3>Capacidad reutilizable</h3>
+              <ul>
+                <li>Se descubre por su descripción.</li>
+                <li>Se invoca implícita o explícitamente.</li>
+                <li>Contiene un procedimiento concreto.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="small muted" style="margin-top: 1.5rem">Una herramienta ejecuta acciones. Un MCP conecta el agente con herramientas o datos externos.</p>
+        </div>
+        <div class="footer"><span>Instrucciones · capacidades · herramientas</span><span class="counter">08 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Harness">
+        <p class="eyebrow">El harness preparado</p>
+        <div class="content split-wide">
+          <div>
+            <h2>Todo tiene un sitio</h2>
+            <p class="lead">La carpeta hace de memoria, método, caja de herramientas y expediente.</p>
+          </div>
+          <div class="panel">
+            <pre>curso-auditor…/
+├── AGENTS.md
+├── CLAUDE.md
+├── docs/
+├── skills/
+├── scripts/
+├── schemas/
+├── audits/
+├── evals/
+└── slides/</pre>
+          </div>
+        </div>
+        <div class="footer"><span>Un repositorio · muchas auditorías independientes</span><span class="counter">09 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Reglas y documentación">
+        <p class="eyebrow">Dentro del harness · 1/4</p>
+        <div class="content file-list">
+          <h2>Reglas y conocimiento</h2>
+          <dl>
+            <dt>AGENTS.md</dt><dd>Reglas permanentes para Codex y para la auditoría.</dd>
+            <dt>CLAUDE.md</dt><dd>Punto de entrada equivalente para Claude Code.</dd>
+            <dt>docs/exercises/</dt><dd>Las misiones que realiza el alumnado, en orden.</dd>
+            <dt>docs/methodology/</dt><dd>Resumen operativo de WCAG-EM 2.0.</dd>
+            <dt>docs/reference/</dt><dd>Fuentes oficiales: WCAG, ACT, ARIA y herramientas.</dd>
+            <dt>docs/research/</dt><dd>Decisiones de diseño fundamentadas para ampliar el curso.</dd>
+          </dl>
+        </div>
+        <div class="footer"><span>El agente consulta; no inventa requisitos</span><span class="counter">10 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Capacidades">
+        <p class="eyebrow">Dentro del harness · 2/4</p>
+        <div class="content file-list">
+          <h2>Capacidades y repetibilidad</h2>
+          <dl>
+            <dt>skills/</dt><dd>Fuente compartida de las capacidades que crearemos.</dd>
+            <dt>.agents/skills</dt><dd>Enlace para que Codex descubra las skills.</dd>
+            <dt>.claude/skills</dt><dd>Enlace para que Claude Code descubra las mismas skills.</dd>
+            <dt>agent-browser</dt><dd>Navega, interactúa, captura evidencia y ejecuta Axe.</dd>
+            <dt>scripts/</dt><dd>Operaciones mecánicas que deben repetirse igual.</dd>
+            <dt>schemas/</dt><dd>Forma común de los documentos, sin obligarnos a editar JSON.</dd>
+            <dt>evals/</dt><dd>Casos y rúbrica para evaluar si una skill realmente ayuda.</dd>
+          </dl>
+        </div>
+        <div class="footer"><span>La IA decide · los scripts repiten</span><span class="counter">11 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Expediente">
+        <p class="eyebrow">Dentro del harness · 3/4</p>
+        <div class="content file-list">
+          <div>
+            <h2>Una carpeta por auditoría</h2>
+            <pre class="panel">audits/class/
+├── brief.md
+├── scope.json
+├── inventory.json
+├── sample.json
+├── runs/
+├── coverage.json
+├── evidence/
+├── findings.json
+├── report/
+└── exports/</pre>
+          </div>
+          <dl>
+            <dt>brief.md</dt><dd>El encargo que recibimos.</dd>
+            <dt>scope.json</dt><dd>Qué entra, qué queda fuera y contra qué evaluamos.</dd>
+            <dt>inventory.json</dt><dd>Mapa de vistas, estados y procesos.</dd>
+            <dt>sample.json</dt><dd>Qué se evalúa y por qué representa al producto.</dd>
+            <dt>runs/</dt><dd>Ejecuciones reproducibles y resultados brutos de Axe.</dd>
+          </dl>
+        </div>
+        <div class="footer"><span>Nunca se mezclan dos auditorías</span><span class="counter">12 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Cobertura y hallazgos">
+        <p class="eyebrow">Dentro del harness · 4/4</p>
+        <div class="content grid-2">
+          <div>
+            <h2><code>coverage.json</code></h2>
+            <p>Responde qué se ha evaluado realmente.</p>
+            <div class="terminal"><pre>"criterion": "2.1.1",
+"applicability": "applicable",
+"outcome": "cantTell",
+"methods": [{
+  "type": "agent-assisted",
+  "name": "Keyboard"
+}]</pre></div>
+            <p class="small">Resultados: <code>passed</code>, <code>failed</code>, <code>inapplicable</code>, <code>cantTell</code> o <code>untested</code>.</p>
+          </div>
+          <div>
+            <h2><code>findings.json</code></h2>
+            <p>Contiene únicamente problemas trazables.</p>
+            <div class="terminal"><pre>"criterion": "1.1.1",
+"status": "confirmed",
+"impact": "serious",
+"evidence": […],
+"stepsToReproduce": […]</pre></div>
+            <p class="small">De aquí salen el HTML, el CSV y los futuros tickets.</p>
+          </div>
+        </div>
+        <div class="footer"><span>Cobertura ≠ hallazgos</span><span class="counter">13 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Flujo de artefactos">
+        <p class="eyebrow">Cómo se conectan los archivos</p>
+        <div class="content">
+          <h2>Cada ejercicio alimenta el siguiente</h2>
+          <div class="flow" role="img" aria-label="Flujo de artefactos">
+            <span>brief</span><b>→</b><span>scope</span><b>→</b><span>inventory</span><b>→</b><span>sample</span><b>→</b><span>runs</span><b>→</b><span>coverage</span><b>→</b><span>findings</span><b>→</b><span>report</span>
+          </div>
+          <p class="quote" style="margin-top: 2.5rem">Una conclusión debe poder volver hasta la evidencia que la originó.</p>
+        </div>
+        <div class="footer"><span>Trazabilidad de extremo a extremo</span><span class="counter">14 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Ejercicio 1">
+        <p class="eyebrow">Empezamos a construir</p>
+        <div class="content exercise">
+          <div class="giant-number" aria-hidden="true">1</div>
+          <div>
+            <div class="exercise-meta"><span>25 minutos</span><span>Alcance</span></div>
+            <h2>Ponemos límites al encargo</h2>
+            <p class="lead">Cread una skill que transforme una petición ambigua en un alcance basado en WCAG-EM.</p>
+            <ul><li>Skill de alcance.</li><li><code>scope.json</code>.</li><li>Inclusiones, exclusiones, supuestos y dudas.</li></ul>
+          </div>
+        </div>
+        <div class="footer"><span>Extra: probadla con un encargo de una sola frase</span><span class="counter">15 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Ejercicio 2">
+        <p class="eyebrow">Exploramos el producto</p>
+        <div class="content exercise">
+          <div class="giant-number" aria-hidden="true">2</div>
+          <div>
+            <div class="exercise-meta"><span>25 minutos</span><span>Muestra</span></div>
+            <h2>Dibujamos el mapa y elegimos qué mirar</h2>
+            <p class="lead">Cread una skill que navegue CityLights con agent-browser y proponga una selección defendible.</p>
+            <ul><li><code>inventory.json</code>.</li><li><code>sample.json</code>.</li><li>Vistas, estados, procesos y razones.</li></ul>
+          </div>
+        </div>
+        <div class="footer"><span>Producto: CityLights en GitHub Pages</span><span class="counter">16 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Ejercicio 3">
+        <p class="eyebrow">Primer radar</p>
+        <div class="content exercise">
+          <div class="giant-number" aria-hidden="true">3</div>
+          <div>
+            <div class="exercise-meta"><span>25 minutos</span><span>Axe</span></div>
+            <h2>Pasamos la inspección automática</h2>
+            <p class="lead">Cread una skill que ejecute Axe sobre la muestra y conserve los resultados brutos.</p>
+            <ul><li>Una ejecución dentro de <code>runs/</code>.</li><li>Manifiesto de herramientas y versiones.</li><li>Límites de la automatización.</li></ul>
+          </div>
+        </div>
+        <div class="footer"><span>Axe encuentra señales · el equipo confirma hallazgos</span><span class="counter">17 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Ejercicio 4">
+        <p class="eyebrow">Reserva · si avanzamos rápido</p>
+        <div class="content exercise">
+          <div class="giant-number" aria-hidden="true">4</div>
+          <div>
+            <div class="exercise-meta"><span>25 minutos</span><span>Cobertura</span></div>
+            <h2>Decidimos cómo revisar cada criterio</h2>
+            <p class="lead">Cread una skill que conecte criterios A y AA con Axe, pruebas manuales y revisión humana.</p>
+            <ul><li><code>coverage.json</code>.</li><li>Aplicabilidad, método, muestra y evidencia.</li><li>Sin convertir señales en conclusiones.</li></ul>
+          </div>
+        </div>
+        <div class="footer"><span>Lo no probado permanece untested</span><span class="counter">18 / 19</span></div>
+      </section>
+
+      <section class="slide" data-title="Ejercicio 5">
+        <p class="eyebrow">Reserva · si avanzamos muy rápido</p>
+        <div class="content exercise">
+          <div class="giant-number" aria-hidden="true">5</div>
+          <div>
+            <div class="exercise-meta"><span>25 minutos</span><span>Prueba manual</span></div>
+            <h2>Auditamos por familias de criterios</h2>
+            <p class="lead">Cread una skill especializada y ejecutadla sobre la muestra con un procedimiento reproducible.</p>
+            <ul><li>Teclado y foco.</li><li>Semántica y formularios.</li><li>Adaptación visual y reflow.</li><li>Evidencia en <code>audits/class/evidence/</code>.</li></ul>
+          </div>
+        </div>
+        <div class="footer"><span>Si el agente no puede decidir: cantTell</span><span class="counter">19 / 19</span></div>
+      </section>
+    </main>
+
+    <nav class="controls" aria-label="Controles de la presentación">
+      <button type="button" id="previous" aria-label="Diapositiva anterior">←</button>
+      <button type="button" id="next" aria-label="Diapositiva siguiente">→</button>
+    </nav>
+    <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress"></div></div>
+    <div id="announcer" class="sr-only" aria-live="polite"></div>
+
+    <script>
+      const slides = [...document.querySelectorAll(".slide")];
+      const previousButton = document.querySelector("#previous");
+      const nextButton = document.querySelector("#next");
+      const progress = document.querySelector("#progress");
+      const announcer = document.querySelector("#announcer");
+      let current = Math.max(
+        0,
+        Math.min(slides.length - 1, Number.parseInt(location.hash.slice(1), 10) - 1 || 0),
+      );
+
+      function show(index, announce = true) {
+        current = Math.max(0, Math.min(slides.length - 1, index));
+        slides.forEach((slide, slideIndex) => {
+          const active = slideIndex === current;
+          slide.classList.toggle("active", active);
+          slide.setAttribute("aria-hidden", String(!active));
+        });
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        history.replaceState(null, "", `#${current + 1}`);
+        document.title = `${current + 1}/${slides.length} · ${slides[current].dataset.title}`;
+        previousButton.disabled = current === 0;
+        nextButton.disabled = current === slides.length - 1;
+        if (announce) {
+          announcer.textContent = `Diapositiva ${current + 1} de ${slides.length}: ${slides[current].dataset.title}`;
+        }
+      }
+
+      function isInteractive(target) {
+        return target instanceof Element && Boolean(target.closest("a, button, input, textarea, select"));
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (isInteractive(event.target) && event.key === " ") return;
+        if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+          event.preventDefault();
+          show(current + 1);
+        } else if (["ArrowLeft", "PageUp"].includes(event.key)) {
+          event.preventDefault();
+          show(current - 1);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          show(0);
+        } else if (event.key === "End") {
+          event.preventDefault();
+          show(slides.length - 1);
+        } else if (event.key.toLowerCase() === "f") {
+          event.preventDefault();
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+          else document.exitFullscreen();
+        }
+      });
+
+      previousButton.addEventListener("click", () => show(current - 1));
+      nextButton.addEventListener("click", () => show(current + 1));
+      window.addEventListener("hashchange", () => {
+        const requested = Number.parseInt(location.hash.slice(1), 10) - 1;
+        if (Number.isInteger(requested)) show(requested, false);
+      });
+      show(current, false);
+    </script>
+  </body>
+</html>
