@@ -1,6 +1,6 @@
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
-import { createServer } from "node:http";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import AxeBuilder from "@axe-core/playwright";
 import { chromium } from "playwright";
 import { root, validateAudit } from "./audit-lib.mjs";
@@ -32,40 +32,6 @@ if (scope.status !== "approved" || sample.status !== "approved") {
 }
 
 const fixtureRoot = path.join(root, "fixtures", "demo-site");
-const contentTypes = {
-  ".css": "text/css; charset=utf-8",
-  ".html": "text/html; charset=utf-8",
-  ".js": "text/javascript; charset=utf-8",
-  ".svg": "image/svg+xml",
-};
-
-const server = createServer(async (request, response) => {
-  try {
-    const requestedPath = decodeURIComponent(
-      new URL(request.url, "http://localhost").pathname,
-    );
-    const relativePath = requestedPath === "/" ? "index.html" : requestedPath.slice(1);
-    const file = path.resolve(fixtureRoot, relativePath);
-    if (!file.startsWith(`${fixtureRoot}${path.sep}`))
-      throw new Error("Ruta no permitida");
-    if (!(await stat(file)).isFile()) throw new Error("No es un archivo");
-    response.writeHead(200, {
-      "Content-Type": contentTypes[path.extname(file)] ?? "application/octet-stream",
-    });
-    response.end(await readFile(file));
-  } catch {
-    response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-    response.end("No encontrado");
-  }
-});
-
-await new Promise((resolve, reject) => {
-  server.once("error", reject);
-  server.listen(0, "127.0.0.1", resolve);
-});
-
-const address = server.address();
-const baseUrl = `http://127.0.0.1:${address.port}`;
 const runId = new Date().toISOString().replaceAll(":", "-").replaceAll(".", "-");
 const outputDirectory = path.resolve(
   requestedOutput ?? path.join(auditDirectory, "runs", runId),
@@ -81,8 +47,13 @@ try {
 
   for (const selected of sample.views) {
     const page = await context.newPage();
-    const url = new URL(selected.path, baseUrl).href;
-    await page.goto(url, { waitUntil: "networkidle" });
+    const relativePath =
+      selected.path === "/" ? "index.html" : selected.path.replace(/^\/+/, "");
+    const localFile = path.resolve(fixtureRoot, relativePath);
+    if (!localFile.startsWith(`${fixtureRoot}${path.sep}`)) {
+      throw new Error(`La vista ${selected.id} sale de la fixture permitida.`);
+    }
+    await page.goto(pathToFileURL(localFile).href, { waitUntil: "load" });
     for (const action of selected.actions) {
       if (action.type === "click") await page.locator(action.selector).click();
     }
@@ -97,7 +68,7 @@ try {
       id: selected.id,
       name: selected.name,
       path: selected.path,
-      state: selected.state,
+      stateId: selected.stateId,
       file: `axe/${fileName}`,
       counts: {
         violations: axeResult.violations.length,
@@ -145,5 +116,4 @@ try {
   console.log(`  Evidencia: ${path.relative(root, outputDirectory)}`);
 } finally {
   await browser?.close();
-  await new Promise((resolve) => server.close(resolve));
 }

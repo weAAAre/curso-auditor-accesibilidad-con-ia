@@ -14,6 +14,9 @@ auditoría**, no un certificador automático de conformidad.
 - Crea las skills del alumnado en `skills/<nombre>/SKILL.md`. Los enlaces
   preparados durante `pnpm setup` las exponen a Codex y Claude Code; una skill
   nueva se prueba en una conversación limpia para comprobar su descubrimiento.
+- No ejecutes `pnpm skills:sync` dentro de una sesión de agente: los directorios
+  de descubrimiento están protegidos. Ese comando pertenece únicamente al setup
+  previo realizado por la persona.
 - Guarda cada auditoría en `audits/<audit-id>/`; nunca mezcles evidencias entre
   auditorías.
 - Valida los artefactos con `pnpm audit:validate audits/<audit-id>`.

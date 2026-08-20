@@ -103,10 +103,10 @@ export async function validateAudit(auditDirectory, required = []) {
         errors.push(`sample.json: ${selected.viewId} no aparece en el mapa.`);
       } else if (
         inventoryView &&
-        !inventoryView.states.some((state) => state.id === selected.state)
+        !inventoryView.states.some((state) => state.id === selected.stateId)
       ) {
         errors.push(
-          `sample.json: el estado ${selected.viewId}/${selected.state} no aparece en el mapa.`,
+          `sample.json: el estado ${selected.viewId}/${selected.stateId} no aparece en el mapa.`,
         );
       }
     }

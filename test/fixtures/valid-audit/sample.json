@@ -9,7 +9,7 @@
       "viewId": "home",
       "name": "Inicio",
       "path": "/",
-      "state": "default",
+      "stateId": "default",
       "selection": "entire-product",
       "actions": []
     },
@@ -18,7 +18,7 @@
       "viewId": "home",
       "name": "Inicio con Más opciones abierto",
       "path": "/",
-      "state": "menu-open",
+      "stateId": "menu-open",
       "selection": "entire-product",
       "actions": [{ "type": "click", "selector": "#menu-toggle" }]
     }

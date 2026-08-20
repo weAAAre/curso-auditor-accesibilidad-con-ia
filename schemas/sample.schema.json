@@ -24,13 +24,17 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "viewId", "name", "path", "state", "selection", "actions"],
+        "required": ["id", "viewId", "name", "path", "stateId", "selection", "actions"],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "viewId": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "name": { "type": "string", "minLength": 1 },
           "path": { "type": "string", "pattern": "^/" },
-          "state": { "type": "string", "minLength": 1 },
+          "stateId": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Identificador exacto de un estado declarado en inventory.json; no es su nombre visible."
+          },
           "selection": { "enum": ["structured", "random", "entire-product"] },
           "actions": {
             "type": "array",
