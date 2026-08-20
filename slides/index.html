@@ -237,6 +237,25 @@
         font-size: 1.3em;
       }
 
+      .flow.process-flow {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: clamp(0.25rem, 0.55vw, 0.55rem);
+        width: 100%;
+        font-size: clamp(0.82rem, 1.22vw, 1.4rem);
+      }
+
+      .flow.process-flow span {
+        flex: 0 0 auto;
+        padding: 0.5em 0.55em;
+        white-space: nowrap;
+      }
+
+      .flow.process-flow b {
+        flex: 0 0 auto;
+        font-size: 1.05em;
+      }
+
       .flow .future {
         border-color: #888888;
         color: #666666;
@@ -622,7 +641,7 @@
         <p class="eyebrow">El camino completo</p>
         <div class="content">
           <h2>De una petición a un entregable</h2>
-          <div class="flow" role="img" aria-label="Flujo completo de la auditoría">
+          <div class="flow process-flow" role="img" aria-label="Flujo completo de la auditoría">
             <span>Alcance</span><b>→</b><span>Exploración</span><b>→</b><span>Muestra</span><b>→</b><span>Pruebas automáticas</span><b>→</b>
             <span class="future">Pruebas manuales</span><b class="muted">→</b><span class="future">Hallazgos</span><b class="muted">→</b><span class="future">Informe</span>
           </div>
