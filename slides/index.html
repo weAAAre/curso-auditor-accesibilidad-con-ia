@@ -242,6 +242,75 @@
         color: #666666;
       }
 
+      .method-grid {
+        display: grid;
+        grid-template-columns: minmax(20rem, 0.8fr) minmax(30rem, 1.2fr);
+        overflow: hidden;
+        border: 2px solid var(--line);
+      }
+
+      .method-intro {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(1.8rem, 3.5vw, 3.8rem);
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .method-intro h2 {
+        max-width: none;
+        margin: 0 0 1rem;
+        font-size: clamp(3.2rem, 5.5vw, 6.5rem);
+      }
+
+      .method-intro p {
+        max-width: 25ch;
+        margin-bottom: 1.8rem;
+        font-size: clamp(1rem, 1.4vw, 1.55rem);
+      }
+
+      .method-link {
+        align-self: flex-start;
+        padding: 0.55em 0.75em;
+        border: 1px solid currentColor;
+        font-size: clamp(0.78rem, 0.9vw, 1rem);
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      .method-steps {
+        display: grid;
+        max-width: none;
+        padding: clamp(1rem, 2.2vw, 2.4rem) clamp(1.5rem, 3vw, 3.4rem);
+        list-style: none;
+      }
+
+      .method-steps li {
+        display: grid;
+        grid-template-columns: 4rem 1fr;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .method-steps li:last-child {
+        border-bottom: 0;
+      }
+
+      .method-steps span {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: clamp(0.9rem, 1.2vw, 1.3rem);
+        font-weight: 800;
+      }
+
+      .method-steps strong {
+        font-size: clamp(1.15rem, 1.65vw, 1.85rem);
+      }
+
       .compare {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -451,6 +520,7 @@
         .grid-2,
         .grid-3,
         .split-wide,
+        .method-grid,
         .file-list,
         .artifact-grid,
         .handoffs,
@@ -566,20 +636,21 @@
 
       <section class="slide" data-title="WCAG-EM">
         <p class="eyebrow">La metodología</p>
-        <div class="content split-wide">
-          <div>
-            <h2><a href="https://www.w3.org/TR/wcag-em-2/" target="_blank" rel="noreferrer">WCAG-EM 2.0 ↗</a></h2>
-            <p class="lead">Cinco pasos para que una auditoría sea trazable y repetible.</p>
+        <div class="content method-grid">
+          <div class="method-intro">
+            <h2>WCAG-EM<br />2.0</h2>
+            <p>Cinco pasos para que una auditoría sea trazable y repetible.</p>
+            <a class="method-link" href="https://www.w3.org/TR/wcag-em-2/" target="_blank" rel="noreferrer">Metodología oficial · W3C ↗</a>
           </div>
-          <ol>
-            <li>Definir el alcance.</li>
-            <li>Explorar el producto digital.</li>
-            <li>Seleccionar una muestra representativa.</li>
-            <li>Evaluar la muestra seleccionada.</li>
-            <li>Reportar los resultados.</li>
+          <ol class="method-steps">
+            <li><span>01</span><strong>Definir el alcance</strong></li>
+            <li><span>02</span><strong>Explorar el producto digital</strong></li>
+            <li><span>03</span><strong>Seleccionar una muestra</strong></li>
+            <li><span>04</span><strong>Evaluar la muestra</strong></li>
+            <li><span>05</span><strong>Reportar los resultados</strong></li>
           </ol>
         </div>
-        <div class="footer"><span>WCAG-EM organiza la evaluación · WCAG 2.2 define los requisitos</span><span class="counter">04 / 19</span></div>
+        <div class="footer"><span>WCAG-EM organiza el proceso · WCAG 2.2 define qué debe cumplir</span><span class="counter">04 / 19</span></div>
       </section>
 
       <section class="slide" data-title="Proyecto">
