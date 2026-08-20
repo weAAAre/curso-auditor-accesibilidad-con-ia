@@ -34,12 +34,18 @@ Guardad snapshots, capturas o notas reproducibles dentro de
 `audits/class/evidence/<familia>/`. Si el agente no puede realizar una prueba o
 la evidencia necesita interpretación, el resultado correcto es `cantTell`.
 
+Siempre que el problema sea visualizable, la skill debe guardar también una
+captura con la zona afectada enmarcada en rojo. Si una imagen no puede demostrar
+el problema, debe registrar la razón como `not-capturable`; no debe inventar una
+captura ni utilizar una imagen irrelevante para cumplir el requisito.
+
 ## Al terminar debéis poder enseñar
 
 - La nueva skill especializada en `skills/`.
 - Los criterios y condiciones de aplicabilidad que declara.
 - El recorrido realizado sobre la muestra.
-- La evidencia de al menos una decisión.
+- La evidencia de al menos una decisión, incluida su captura anotada cuando sea
+  visualizable.
 - Los cambios realizados en `coverage.json`.
 - Una limitación que la skill no intente ocultar.
 

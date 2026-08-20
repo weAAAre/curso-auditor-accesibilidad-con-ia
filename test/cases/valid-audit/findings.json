@@ -20,6 +20,12 @@
           "description": "Resultado técnico usado para probar el contrato."
         }
       ],
+      "visualEvidence": {
+        "status": "captured",
+        "reference": "evidence/image-without-alt.png",
+        "description": "La imagen afectada aparece enmarcada en rojo.",
+        "annotation": "red-rectangle"
+      },
       "sources": ["https://www.w3.org/TR/WCAG22/#non-text-content"]
     }
   ]

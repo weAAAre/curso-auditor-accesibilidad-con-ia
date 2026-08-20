@@ -13,3 +13,7 @@ del equipo.
 
 Una skill está lista para la clase si no obtiene ningún cero y suma al menos 8
 puntos. Registrad también una frase: “La siguiente mejora sería…”.
+
+En skills que evalúan criterios, la trazabilidad obtiene un cero si un problema
+visualizable no incluye captura anotada o si omite justificar por qué una
+evidencia visual no es posible.

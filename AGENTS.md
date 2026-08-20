@@ -46,6 +46,11 @@ auditoría**, no un certificador automático de conformidad.
   justifica el resultado.
 - `findings.json` es la fuente canónica de hallazgos. Los informes y
   exportaciones se derivan de ella y no añaden conclusiones nuevas.
+- Todo hallazgo debe incluir una captura anotada cuando el problema pueda
+  representarse visualmente. Reproduce el estado, enmarca la zona afectada con
+  un rectángulo rojo mediante `agent-browser`, guarda la imagen en
+  `audits/<audit-id>/evidence/` y retira el marcado temporal. Si una imagen no
+  puede demostrar el problema, registra `not-capturable` y explica por qué.
 - Alcance, muestra y hallazgos finales requieren una decisión humana explícita.
 
 ## Límites

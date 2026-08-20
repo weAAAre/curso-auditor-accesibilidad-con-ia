@@ -861,7 +861,11 @@ Transforma el texto en:
   "expected": "Contraste mínimo de 4,5:1",
   "stepsToReproduce": ["Abrir Eventos", "Localizar la fecha"],
   "evidence": [{ "type": "axe", "reference": "runs/axe.json",
-    "description": "Fallo color-contrast" }]
+    "description": "Fallo color-contrast" }],
+  "visualEvidence": { "status": "captured",
+    "reference": "evidence/contraste-fecha.png",
+    "description": "Fecha enmarcada en rojo",
+    "annotation": "red-rectangle" }
 }</pre></div>
           </div>
         </div>
@@ -919,7 +923,7 @@ Transforma el texto en:
             <div class="exercise-meta"><span>25 minutos</span><span>Axe</span></div>
             <h2>Pasamos la inspección automática</h2>
             <p class="lead">Cread una skill que ejecute Axe sobre la muestra y conserve los resultados brutos.</p>
-            <ul><li>Una ejecución dentro de <code>runs/</code>.</li><li>Manifiesto de herramientas y versiones.</li><li>Límites de la automatización.</li></ul>
+            <ul><li>Una ejecución dentro de <code>runs/</code>.</li><li>Manifiesto de herramientas y versiones.</li><li>Una señal enmarcada en rojo y capturada.</li><li>Límites de la automatización.</li></ul>
           </div>
         </div>
         <div class="footer"><span>Axe encuentra señales · el equipo confirma hallazgos</span><span class="counter">17 / 19</span></div>
@@ -947,7 +951,7 @@ Transforma el texto en:
             <div class="exercise-meta"><span>25 minutos</span><span>Prueba manual</span></div>
             <h2>Auditamos por familias de criterios</h2>
             <p class="lead">Cread una skill especializada y ejecutadla sobre la muestra con un procedimiento reproducible.</p>
-            <ul><li>Teclado y foco.</li><li>Semántica y formularios.</li><li>Adaptación visual y reflow.</li><li>Evidencia en <code>audits/class/evidence/</code>.</li></ul>
+            <ul><li>Teclado y foco.</li><li>Semántica y formularios.</li><li>Adaptación visual y reflow.</li><li>Captura con rectángulo rojo cuando sea posible.</li></ul>
           </div>
         </div>
         <div class="footer"><span>Si el agente no puede decidir: cantTell</span><span class="counter">19 / 19</span></div>

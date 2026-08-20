@@ -25,6 +25,7 @@
           "expected",
           "observed",
           "evidence",
+          "visualEvidence",
           "sources"
         ],
         "properties": {
@@ -63,6 +64,35 @@
                 "description": { "type": "string", "minLength": 1 }
               }
             }
+          },
+          "visualEvidence": {
+            "oneOf": [
+              {
+                "title": "Captura disponible",
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["status", "reference", "description", "annotation"],
+                "properties": {
+                  "status": { "const": "captured" },
+                  "reference": {
+                    "type": "string",
+                    "pattern": "^evidence/.+\\.(png|jpg|jpeg|webp)$"
+                  },
+                  "description": { "type": "string", "minLength": 1 },
+                  "annotation": { "const": "red-rectangle" }
+                }
+              },
+              {
+                "title": "El problema no puede representarse en una imagen",
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["status", "reason"],
+                "properties": {
+                  "status": { "const": "not-capturable" },
+                  "reason": { "type": "string", "minLength": 10 }
+                }
+              }
+            ]
           },
           "sources": {
             "type": "array",

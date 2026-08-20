@@ -26,6 +26,10 @@ personas, evidencia, pasos de reproducción, comportamiento esperado y
 observado, fuente y estado de revisión. No publiquéis el informe ni creéis
 tickets en servicios externos.
 
+Además, cada hallazgo debe declarar `visualEvidence`: `captured` con una imagen
+enmarcada en rojo cuando el problema sea visualizable, o `not-capturable` con
+una razón concreta cuando una captura no pueda demostrarlo.
+
 ## Al terminar debéis poder enseñar
 
 - La nueva skill de consolidación y entrega.

@@ -30,6 +30,11 @@ cuerpo incluye:
 - Límites, detenciones y decisiones humanas.
 - Comandos existentes que debe usar, sin reimplementar sus funciones.
 
+Si la skill evalúa criterios o produce hallazgos, debe aplicar el protocolo de
+evidencia visual de `docs/reference/agent-browser.md`: captura con rectángulo
+rojo siempre que el problema sea visualizable o justificación `not-capturable`
+cuando una imagen no pueda demostrarlo.
+
 Escribe para una persona no programadora. Prefiere “ficha de alcance” a
 “instancia del esquema”, pero conserva el nombre técnico del archivo para que el
 resultado sea verificable.

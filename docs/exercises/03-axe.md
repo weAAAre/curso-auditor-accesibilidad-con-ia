@@ -15,6 +15,11 @@ forma reproducible. Debe usar el comando existente, que navega con
 `agent-browser` y ejecuta su Axe Core integrado, conservar los resultados brutos
 y explicar qué necesita revisión humana.
 
+La skill debe elegir al menos una señal que pueda verse, reproducir su estado y
+guardar una captura con la zona afectada enmarcada en rojo dentro de
+`audits/class/evidence/axe/`. La captura demuestra dónde mirar; el JSON bruto
+sigue siendo la evidencia técnica.
+
 ## Al terminar debéis poder enseñar
 
 - La nueva skill en `skills/`.
@@ -22,6 +27,7 @@ y explicar qué necesita revisión humana.
 - El manifiesto que identifica `agent-browser`, Axe Core, navegador, versiones,
   vistas y hora.
 - La diferencia entre `violations`, `incomplete`, `passes` e `inapplicable`.
+- Una captura anotada que permita localizar una señal de Axe.
 - Al menos una limitación concreta de la ejecución automática.
 
 ## Preguntas para orientar la conversación
