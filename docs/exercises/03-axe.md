@@ -11,14 +11,16 @@ pero no decide por sí solo si el producto cumple WCAG.
 ## Vuestra misión
 
 Construid una skill que prepare y ejecute la primera inspección automática de
-forma reproducible. Debe usar el comando existente, conservar los resultados
-brutos y explicar qué necesita revisión humana.
+forma reproducible. Debe usar el comando existente, que navega con
+`agent-browser` y ejecuta su Axe Core integrado, conservar los resultados brutos
+y explicar qué necesita revisión humana.
 
 ## Al terminar debéis poder enseñar
 
 - La nueva skill en `skills/`.
 - Una ejecución dentro de `audits/demo/runs/`.
-- El manifiesto que identifica herramienta, versión, navegador, vistas y hora.
+- El manifiesto que identifica `agent-browser`, Axe Core, navegador, versiones,
+  vistas y hora.
 - La diferencia entre `violations`, `incomplete`, `passes` e `inapplicable`.
 - Al menos una limitación concreta de la ejecución automática.
 

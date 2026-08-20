@@ -1,9 +1,35 @@
+import { execFile } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import AxeBuilder from "@axe-core/playwright";
-import { chromium } from "playwright";
+import { promisify } from "node:util";
 import { root, validateAudit } from "./audit-lib.mjs";
+
+const execute = promisify(execFile);
+const agentBrowserCli = path.join(
+  root,
+  "node_modules",
+  "agent-browser",
+  "bin",
+  "agent-browser.js",
+);
+
+async function runAgentBrowser(args, { json = true } = {}) {
+  const finalArgs = json ? [...args, "--json"] : args;
+  const { stdout } = await execute(process.execPath, [agentBrowserCli, ...finalArgs], {
+    cwd: root,
+    maxBuffer: 10 * 1024 * 1024,
+  });
+  if (!json) return stdout.trim();
+
+  const payload = JSON.parse(stdout);
+  if (!payload.success) {
+    throw new Error(
+      payload.error?.message ?? "agent-browser no pudo completar la acción",
+    );
+  }
+  return { payload, raw: stdout.trim() };
+}
 
 const args = process.argv.slice(2);
 const outputIndex = args.indexOf("--output");
@@ -37,67 +63,71 @@ const outputDirectory = path.resolve(
   requestedOutput ?? path.join(auditDirectory, "runs", runId),
 );
 const axeDirectory = path.join(outputDirectory, "axe");
-await mkdir(axeDirectory, { recursive: true });
+const packageJson = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
 
-let browser;
+let session;
 try {
-  browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+  session = await runAgentBrowser(
+    ["session", "id", "--scope", "worktree", "--prefix", `audit-${scope.auditId}`],
+    { json: false },
+  );
   const results = [];
+  let userAgent = "unknown";
+  let axeVersion = "unknown";
 
-  for (const selected of sample.views) {
-    const page = await context.newPage();
+  for (const [index, selected] of sample.views.entries()) {
     const relativePath =
       selected.path === "/" ? "index.html" : selected.path.replace(/^\/+/, "");
     const localFile = path.resolve(fixtureRoot, relativePath);
     if (!localFile.startsWith(`${fixtureRoot}${path.sep}`)) {
       throw new Error(`La vista ${selected.id} sale de la fixture permitida.`);
     }
-    await page.goto(pathToFileURL(localFile).href, { waitUntil: "load" });
-    for (const action of selected.actions) {
-      if (action.type === "click") await page.locator(action.selector).click();
+
+    await runAgentBrowser(["--session", session, "open", pathToFileURL(localFile).href]);
+    if (index === 0) {
+      await runAgentBrowser(["--session", session, "set", "viewport", "1280", "720"]);
+      const browserIdentity = await runAgentBrowser([
+        "--session",
+        session,
+        "eval",
+        "navigator.userAgent",
+      ]);
+      userAgent = browserIdentity.payload.data.result;
     }
 
-    const axeResult = await new AxeBuilder({ page }).analyze();
+    for (const action of selected.actions) {
+      if (action.type === "click") {
+        await runAgentBrowser(["--session", session, "click", action.selector]);
+      }
+    }
+
+    const audit = await runAgentBrowser(["--session", session, "a11y"]);
+    await mkdir(axeDirectory, { recursive: true });
     const fileName = `${selected.id}.json`;
-    await writeFile(
-      path.join(axeDirectory, fileName),
-      `${JSON.stringify(axeResult, null, 2)}\n`,
-    );
+    await writeFile(path.join(axeDirectory, fileName), `${audit.raw}\n`);
+    axeVersion = audit.payload.data.axeVersion;
     results.push({
       id: selected.id,
       name: selected.name,
       path: selected.path,
       stateId: selected.stateId,
       file: `axe/${fileName}`,
-      counts: {
-        violations: axeResult.violations.length,
-        incomplete: axeResult.incomplete.length,
-        passes: axeResult.passes.length,
-        inapplicable: axeResult.inapplicable.length,
-      },
+      counts: audit.payload.data.counts,
     });
-    await page.close();
   }
 
+  const chromeVersion = userAgent.match(/(?:Headless)?Chrome\/([^ ]+)/)?.[1];
   const manifest = {
     schemaVersion: 1,
     auditId: scope.auditId,
     runId,
     createdAt: new Date().toISOString(),
     tool: {
-      name: results.length > 0 ? "axe-core" : "unknown",
-      version:
-        results.length > 0
-          ? JSON.parse(
-              await readFile(
-                path.join(axeDirectory, results[0].file.split("/").at(-1)),
-                "utf8",
-              ),
-            ).testEngine.version
-          : "unknown",
+      name: "agent-browser",
+      version: packageJson.devDependencies["agent-browser"],
+      auditEngine: { name: "axe-core", version: axeVersion },
     },
-    browser: { name: "chromium", version: browser.version() },
+    browser: { name: "chromium", version: chromeVersion ?? "unknown" },
     viewport: { width: 1280, height: 720 },
     sampleDecision: sample.decision,
     results,
@@ -107,7 +137,9 @@ try {
     `${JSON.stringify(manifest, null, 2)}\n`,
   );
 
-  console.log(`✓ Axe ha revisado ${results.length} vista(s) y estado(s)`);
+  console.log(
+    `✓ agent-browser y Axe han revisado ${results.length} vista(s) y estado(s)`,
+  );
   for (const result of results) {
     console.log(
       `  ${result.id}: ${result.counts.violations} violation(s), ${result.counts.incomplete} incomplete`,
@@ -115,5 +147,9 @@ try {
   }
   console.log(`  Evidencia: ${path.relative(root, outputDirectory)}`);
 } finally {
-  await browser?.close();
+  if (session) {
+    await runAgentBrowser(["--session", session, "close"], { json: false }).catch(
+      () => undefined,
+    );
+  }
 }

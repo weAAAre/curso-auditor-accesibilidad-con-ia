@@ -8,5 +8,7 @@ resultado visible y una comprobación automática.
 3. [Pasamos el primer radar automático](exercises/03-axe.md)
 
 Antes de comenzar puedes leer la [metodología resumida](methodology/wcag-em.md).
+Para entender cómo el agente recorre el producto, consulta la
+[guía breve de navegación](reference/agent-browser.md).
 Las fuentes primarias empleadas por el curso están en
 [`reference/sources.md`](reference/sources.md).

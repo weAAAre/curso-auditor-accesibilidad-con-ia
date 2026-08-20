@@ -9,14 +9,17 @@ experiencia: sus pantallas, estados y recorridos. Una URL no siempre equivale a
 una única vista; un menú abierto o un formulario con errores también son estados
 que alguien puede experimentar.
 
-El producto de práctica está en `fixtures/demo-site/`. Recorred también las
-vistas anidadas dentro de `checkout/`; un listado resumido por la terminal puede
-ocultarlas.
+El producto de práctica está en `fixtures/demo-site/`. Recorredlo con
+`agent-browser`, observando su estructura accesible e interactuando como una
+persona. Incluid también las vistas anidadas dentro de `checkout/`; un listado
+resumido por la terminal puede ocultarlas.
 
 ## Vuestra misión
 
-Construid una skill que explore el producto y ayude a decidir, con WCAG-EM, qué
-se debe revisar. Aplicadla a la auditoría `demo`.
+Construid una skill que explore el producto con una sesión aislada de
+`agent-browser` y ayude a decidir, con WCAG-EM, qué se debe revisar. Aplicadla a
+la auditoría `demo`. Después de cada interacción que cambie la página debe
+obtener un nuevo snapshot y, al terminar, cerrar la sesión.
 
 No busquéis “la muestra más pequeña”. Buscad una selección defendible. Si el
 producto es suficientemente pequeño, decidid honestamente revisarlo entero.
