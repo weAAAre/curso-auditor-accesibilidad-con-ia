@@ -20,20 +20,17 @@ reproducible de una auditoría profesional.
 
 ## Preparación
 
-Necesitas Node.js 24 o posterior y pnpm. El setup instala la versión fijada de
-`agent-browser`, descarga Chrome for Testing y enlaza las skills para ambos
-agentes.
+Abre esta carpeta con Codex o Claude Code y escribe:
 
-```bash
-pnpm install
-pnpm setup
+```text
+Inicializa el proyecto
 ```
 
-Ejecuta esta preparación en tu terminal antes de abrir el agente. Codex o
-Claude Code pueden pedir después permiso para lanzar el navegador: aprueba solo
-el comando concreto del ejercicio, no una sesión con acceso total.
+El agente instalará lo que falte, preparará `agent-browser`, descargará el
+navegador y verificará que el laboratorio funciona. Si el sistema solicita
+permiso para instalar una herramienta, aprueba únicamente esa operación.
 
-Después abre esta carpeta con Codex o Claude Code y comienza por
+Cuando termine, comienza por
 [`docs/exercises/01-alcance.md`](docs/exercises/01-alcance.md).
 
 ## Mapa del repositorio

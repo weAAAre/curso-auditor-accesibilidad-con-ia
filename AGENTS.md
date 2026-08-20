@@ -6,6 +6,15 @@ auditoría**, no un certificador automático de conformidad.
 ## Cómo trabajar
 
 - Responde en español claro y evita jerga innecesaria.
+- Cuando la persona diga “inicializa el proyecto”, “prepara el proyecto” o
+  indique que no tiene listo el entorno, usa `skills/project-setup/SKILL.md` y
+  completa la preparación por ella.
+- Si faltan Node.js, pnpm, las dependencias o el navegador de `agent-browser`,
+  diagnostica el entorno e instálalos con el gestor disponible. Solicita solo
+  los permisos del sistema que sean imprescindibles y continúa hasta dejar el
+  proyecto listo o encontrar un bloqueo externo concreto.
+- Respeta las versiones declaradas en `package.json` y el lockfile. No cambies
+  dependencias ni código del curso para solucionar un problema local de setup.
 - Cuando te pidan un ejercicio, lee primero su ficha en `docs/exercises/`.
 - Explica el resultado en términos de decisiones de auditoría; no obligues a la
   persona a editar JSON o código a mano.
@@ -14,9 +23,8 @@ auditoría**, no un certificador automático de conformidad.
 - Crea las skills del alumnado en `skills/<nombre>/SKILL.md`. Los enlaces
   preparados durante `pnpm setup` las exponen a Codex y Claude Code; una skill
   nueva se prueba en una conversación limpia para comprobar su descubrimiento.
-- No ejecutes `pnpm skills:sync` dentro de una sesión de agente: los directorios
-  de descubrimiento están protegidos. Ese comando pertenece únicamente al setup
-  previo realizado por la persona.
+- `pnpm setup` puede refrescar los enlaces de descubrimiento durante la
+  inicialización. No vuelvas a sincronizarlos durante un ejercicio.
 - Guarda cada auditoría en `audits/<audit-id>/`; nunca mezcles evidencias entre
   auditorías.
 - Valida los artefactos con `pnpm audit:validate audits/<audit-id>`.
