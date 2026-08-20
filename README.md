@@ -34,10 +34,10 @@ Después abre esta carpeta con Codex o Claude Code y comienza por
 ## Comandos de apoyo
 
 ```bash
-pnpm exercise:check -- 1 audits/demo
-pnpm exercise:check -- 2 audits/demo
-pnpm audit:axe -- audits/demo
-pnpm exercise:check -- 3 audits/demo
+pnpm exercise:check 1 audits/demo
+pnpm exercise:check 2 audits/demo
+pnpm audit:axe audits/demo
+pnpm exercise:check 3 audits/demo
 ```
 
 Si algo falla, el mensaje explica qué pieza falta. No hace falta abrir ni

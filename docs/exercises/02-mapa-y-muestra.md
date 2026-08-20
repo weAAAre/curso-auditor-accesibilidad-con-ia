@@ -9,7 +9,9 @@ experiencia: sus pantallas, estados y recorridos. Una URL no siempre equivale a
 una única vista; un menú abierto o un formulario con errores también son estados
 que alguien puede experimentar.
 
-El producto de práctica está en `fixtures/demo-site/`.
+El producto de práctica está en `fixtures/demo-site/`. Recorred también las
+vistas anidadas dentro de `checkout/`; un listado resumido por la terminal puede
+ocultarlas.
 
 ## Vuestra misión
 
@@ -37,7 +39,7 @@ producto es suficientemente pequeño, decidid honestamente revisarlo entero.
 ## Comprobación
 
 ```bash
-pnpm exercise:check -- 2 audits/demo
+pnpm exercise:check 2 audits/demo
 ```
 
 **Extra:** pedid a otro equipo que critique vuestra selección sin ver cómo la

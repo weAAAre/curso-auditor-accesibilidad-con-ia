@@ -36,7 +36,9 @@ resultado sea verificable.
 
 ## Evaluación
 
-1. Ejecuta `pnpm skills:sync`.
+1. Termina la conversación en la que la has creado y abre una limpia para
+   comprobar que Codex o Claude Code la descubre mediante los enlaces ya
+   preparados por `pnpm setup`.
 2. Pruébala con el caso demo y con un encargo incompleto.
 3. Ejecuta la comprobación del ejercicio.
 4. Revisa el resultado con `evals/rubric.md`.

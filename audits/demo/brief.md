@@ -6,7 +6,8 @@ versión.
 
 ## Lo que sabemos
 
-- Producto: la fixture local `fixtures/demo-site/`.
+- Producto: la fixture local `fixtures/demo-site/`, incluidas las vistas anidadas
+  del proceso de compra en `fixtures/demo-site/checkout/`.
 - Objetivo: evaluación contra WCAG 2.2 nivel AA siguiendo WCAG-EM 2.0.
 - Incluye: inicio, catálogo, detalle de producto y todo el proceso de compra.
 - Incluye estados que aparecen al interactuar, como navegación abierta, diálogo

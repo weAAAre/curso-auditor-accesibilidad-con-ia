@@ -11,12 +11,13 @@ auditoría**, no un certificador automático de conformidad.
   persona a editar JSON o código a mano.
 - Usa como fuentes metodológicas los documentos enlazados desde
   `docs/reference/sources.md`. No inventes requisitos WCAG.
-- Crea las skills del alumnado en `skills/<nombre>/SKILL.md` y ejecuta
-  `pnpm skills:sync` para exponerlas a Codex y Claude Code.
+- Crea las skills del alumnado en `skills/<nombre>/SKILL.md`. Los enlaces
+  preparados durante `pnpm setup` las exponen a Codex y Claude Code; una skill
+  nueva se prueba en una conversación limpia para comprobar su descubrimiento.
 - Guarda cada auditoría en `audits/<audit-id>/`; nunca mezcles evidencias entre
   auditorías.
-- Valida los artefactos con `pnpm audit:validate -- audits/<audit-id>`.
-- Ejecuta Axe únicamente mediante `pnpm audit:axe -- audits/<audit-id>`.
+- Valida los artefactos con `pnpm audit:validate audits/<audit-id>`.
+- Ejecuta Axe únicamente mediante `pnpm audit:axe audits/<audit-id>`.
 - Conserva los resultados brutos. No conviertas automáticamente una violación
   de Axe en un hallazgo confirmado.
 - `passes` no significa conformidad y `incomplete` requiere revisión humana.

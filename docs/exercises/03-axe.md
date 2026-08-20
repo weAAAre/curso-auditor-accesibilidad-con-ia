@@ -32,8 +32,8 @@ brutos y explicar qué necesita revisión humana.
 ## Ejecución y comprobación
 
 ```bash
-pnpm audit:axe -- audits/demo
-pnpm exercise:check -- 3 audits/demo
+pnpm audit:axe audits/demo
+pnpm exercise:check 3 audits/demo
 ```
 
 **Extra:** elegid un resultado `incomplete` y redactad la pregunta de revisión

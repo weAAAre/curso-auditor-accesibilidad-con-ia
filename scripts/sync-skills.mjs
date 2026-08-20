@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, readFile, rm } from "node:fs/promises";
+import { lstat, mkdir, readlink, rm, symlink } from "node:fs/promises";
 import path from "node:path";
 import { root } from "./audit-lib.mjs";
 
@@ -8,38 +8,35 @@ const targets = [
   path.join(root, ".agents", "skills"),
   path.join(root, ".claude", "skills"),
 ];
-const skillNames = (await readdir(source, { withFileTypes: true }))
-  .filter((entry) => entry.isDirectory())
-  .map((entry) => entry.name)
-  .sort();
 
 for (const target of targets) {
-  await mkdir(target, { recursive: true });
-  for (const skillName of skillNames) {
-    const sourceFile = path.join(source, skillName, "SKILL.md");
-    const targetDirectory = path.join(target, skillName);
-    const targetFile = path.join(targetDirectory, "SKILL.md");
-
-    if (checkOnly) {
-      let targetContents;
-      try {
-        targetContents = await readFile(targetFile, "utf8");
-      } catch {
-        throw new Error(`Falta el adaptador ${path.relative(root, targetFile)}.`);
+  const relativeSource = path.relative(path.dirname(target), source);
+  if (checkOnly) {
+    try {
+      const metadata = await lstat(target);
+      const destination = metadata.isSymbolicLink() ? await readlink(target) : undefined;
+      if (!metadata.isSymbolicLink() || destination !== relativeSource) {
+        throw new Error("no apunta al directorio canónico");
       }
-      if ((await readFile(sourceFile, "utf8")) !== targetContents) {
-        throw new Error(`${path.relative(root, targetFile)} no está sincronizado.`);
-      }
-      continue;
+    } catch (error) {
+      throw new Error(
+        `${path.relative(root, target)} no está preparado (${error.message}). Ejecuta pnpm setup fuera del agente.`,
+      );
     }
-
-    await rm(targetDirectory, { recursive: true, force: true });
-    await cp(path.join(source, skillName), targetDirectory, { recursive: true });
+    continue;
   }
+
+  await mkdir(path.dirname(target), { recursive: true });
+  await rm(target, { recursive: true, force: true });
+  await symlink(
+    process.platform === "win32" ? source : relativeSource,
+    target,
+    process.platform === "win32" ? "junction" : "dir",
+  );
 }
 
 console.log(
   checkOnly
-    ? `✓ ${skillNames.length} skills sincronizadas`
+    ? "✓ Skills enlazadas desde ambos agentes"
     : `✓ Skills preparadas para Codex y Claude Code`,
 );
