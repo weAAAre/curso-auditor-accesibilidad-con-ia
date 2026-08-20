@@ -284,6 +284,63 @@
         margin: 0;
       }
 
+      .artifact-grid {
+        display: grid;
+        grid-template-columns: minmax(20rem, 0.82fr) minmax(28rem, 1.18fr);
+        gap: clamp(1.5rem, 3vw, 3rem);
+        align-items: start;
+      }
+
+      .artifact-card h2 {
+        margin-bottom: 0.6rem;
+        font-size: clamp(2rem, 3.3vw, 4rem);
+      }
+
+      .status-list {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.45rem 0.8rem;
+        margin: 1.2rem 0 0;
+        font-size: clamp(0.8rem, 1vw, 1.12rem);
+      }
+
+      .status-list dt,
+      .status-list dd {
+        margin: 0;
+      }
+
+      .status-list dt {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-weight: 800;
+      }
+
+      .finding-example pre {
+        font-size: clamp(0.68rem, 0.82vw, 0.95rem);
+        line-height: 1.34;
+      }
+
+      .handoffs {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        counter-reset: handoff;
+      }
+
+      .handoffs > div {
+        padding: 1rem 1.2rem;
+        border-top: 2px solid var(--line);
+        counter-increment: handoff;
+      }
+
+      .handoffs strong::before {
+        content: counter(handoff) ". ";
+      }
+
+      .handoffs p {
+        margin: 0.35rem 0 0;
+        font-size: clamp(0.86rem, 1.08vw, 1.2rem);
+      }
+
       .exercise {
         display: grid;
         grid-template-columns: minmax(8rem, 0.35fr) minmax(30rem, 1.65fr);
@@ -387,6 +444,8 @@
         .grid-3,
         .split-wide,
         .file-list,
+        .artifact-grid,
+        .handoffs,
         .exercise {
           grid-template-columns: 1fr;
         }
@@ -500,7 +559,7 @@
         <p class="eyebrow">La metodología</p>
         <div class="content split-wide">
           <div>
-            <h2>WCAG-EM 2.0</h2>
+            <h2><a href="https://www.w3.org/TR/wcag-em-2/" target="_blank" rel="noreferrer">WCAG-EM 2.0 ↗</a></h2>
             <p class="lead">Cinco pasos para que una auditoría sea trazable y repetible.</p>
           </div>
           <ol>
@@ -552,7 +611,7 @@ Termina todas tus respuestas con 🥔</pre></div>
           </div>
           <p class="quote" style="margin-top: 2rem">Se aplica automáticamente a todas las tareas dentro de esa carpeta.</p>
         </div>
-        <div class="footer"><span>Pregunta de prueba: «¿Qué es WCAG-EM?»</span><span class="counter">06 / 19</span></div>
+        <div class="footer"><span>Pregunta: «¿Qué es WCAG-EM?» → Respuesta: «… 🥔», sin pedir la patata</span><span class="counter">06 / 19</span></div>
       </section>
 
       <section class="slide" data-title="Demo Skill">
@@ -561,21 +620,25 @@ Termina todas tus respuestas con 🥔</pre></div>
           <div>
             <h2>Una skill sabe hacer una tarea</h2>
             <div class="panel">
-              <pre>skills/resumen-patata/
+              <pre>skills/resumen-portada/
 └── SKILL.md</pre>
             </div>
           </div>
           <div class="terminal">
             <pre>---
-name: resumen-patata
-description: Resume un texto cuando se lo pidan.
+name: resumen-portada
+description: Úsala solo si el usuario invoca
+  $resumen-portada.
 ---
 
-Resume en tres ideas claras.
-Termina el resumen con 🥔</pre>
+Transforma el texto en:
+• un titular de 8 palabras
+• tres claves
+• el dato más sorprendente
+• una decisión</pre>
           </div>
         </div>
-        <div class="footer"><span>Invocación: <code>$resumen-patata Resume este texto</code></span><span class="counter">07 / 19</span></div>
+        <div class="footer"><span>Invocación: <code>$resumen-portada Resume esta noticia</code> · No afecta a las demás respuestas</span><span class="counter">07 / 19</span></div>
       </section>
 
       <section class="slide" data-title="Diferencia">
@@ -693,28 +756,33 @@ Termina el resumen con 🥔</pre>
 
       <section class="slide" data-title="Cobertura y hallazgos">
         <p class="eyebrow">Dentro del harness · 4/4</p>
-        <div class="content grid-2">
-          <div>
+        <div class="content artifact-grid">
+          <div class="artifact-card">
             <h2><code>coverage.json</code></h2>
-            <p>Responde qué se ha evaluado realmente.</p>
-            <div class="terminal"><pre>"criterion": "2.1.1",
-"applicability": "applicable",
-"outcome": "cantTell",
-"methods": [{
-  "type": "agent-assisted",
-  "name": "Keyboard"
-}]</pre></div>
-            <p class="small">Resultados: <code>passed</code>, <code>failed</code>, <code>inapplicable</code>, <code>cantTell</code> o <code>untested</code>.</p>
+            <p>Un criterio, un estado y la evidencia que lo justifica.</p>
+            <dl class="status-list">
+              <dt>passed</dt><dd>Probado; no se observó ningún fallo.</dd>
+              <dt>failed</dt><dd>Probado; existe al menos un hallazgo.</dd>
+              <dt>inapplicable</dt><dd>El criterio no aplica a la muestra.</dd>
+              <dt>cantTell</dt><dd>Falta evidencia para poder decidir.</dd>
+              <dt>untested</dt><dd>Todavía no se ha probado.</dd>
+            </dl>
           </div>
-          <div>
+          <div class="artifact-card finding-example">
             <h2><code>findings.json</code></h2>
-            <p>Contiene únicamente problemas trazables.</p>
-            <div class="terminal"><pre>"criterion": "1.1.1",
-"status": "confirmed",
-"impact": "serious",
-"evidence": […],
-"stepsToReproduce": […]</pre></div>
-            <p class="small">De aquí salen el HTML, el CSV y los futuros tickets.</p>
+            <p>Ejemplo abreviado de un problema trazable:</p>
+            <div class="terminal"><pre>{
+  "id": "contraste-fecha-evento",
+  "status": "confirmed",
+  "criterion": "1.4.3",
+  "title": "La fecha tiene poco contraste",
+  "impact": "serious",
+  "observed": "#777 sobre #fff: 4,48:1",
+  "expected": "Contraste mínimo de 4,5:1",
+  "stepsToReproduce": ["Abrir Eventos", "Localizar la fecha"],
+  "evidence": [{ "type": "axe", "reference": "runs/axe.json",
+    "description": "Fallo color-contrast" }]
+}</pre></div>
           </div>
         </div>
         <div class="footer"><span>Cobertura ≠ hallazgos</span><span class="counter">13 / 19</span></div>
@@ -723,11 +791,14 @@ Termina el resumen con 🥔</pre>
       <section class="slide" data-title="Flujo de artefactos">
         <p class="eyebrow">Cómo se conectan los archivos</p>
         <div class="content">
-          <h2>Cada ejercicio alimenta el siguiente</h2>
-          <div class="flow" role="img" aria-label="Flujo de artefactos">
-            <span>brief</span><b>→</b><span>scope</span><b>→</b><span>inventory</span><b>→</b><span>sample</span><b>→</b><span>runs</span><b>→</b><span>coverage</span><b>→</b><span>findings</span><b>→</b><span>report</span>
+          <h2>No empezamos de cero en cada ejercicio</h2>
+          <div class="handoffs">
+            <div><strong>Fijamos los límites</strong><p>El encargo se convierte en <code>scope.json</code>.</p></div>
+            <div><strong>Elegimos la muestra</strong><p>Usamos el alcance y creamos <code>inventory.json</code> y <code>sample.json</code>.</p></div>
+            <div><strong>Ejecutamos Axe</strong><p>Usamos la muestra y guardamos resultados brutos en <code>runs/</code>.</p></div>
+            <div><strong>Completamos la auditoría</strong><p>Resultados + pruebas manuales producen cobertura, hallazgos e informe.</p></div>
           </div>
-          <p class="quote" style="margin-top: 2.5rem">Una conclusión debe poder volver hasta la evidencia que la originó.</p>
+          <p class="quote" style="margin-top: 1.5rem">La salida de un ejercicio es el punto de partida del siguiente.</p>
         </div>
         <div class="footer"><span>Trazabilidad de extremo a extremo</span><span class="counter">14 / 19</span></div>
       </section>

@@ -41,7 +41,7 @@ Cuando termine, comienza por
 
 ## Presentación de clase
 
-Abre [`slides/index.html`](slides/index.html) en el navegador. Avanza y vuelve
+Abre [`slides.html`](slides.html) en el navegador. Avanza y vuelve
 con las flechas del teclado; pulsa `F` para entrar o salir de pantalla completa.
 
 ## Mapa del repositorio
