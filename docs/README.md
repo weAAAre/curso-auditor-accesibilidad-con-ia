@@ -1,7 +1,7 @@
 # Guía del curso
 
-Sigue las fichas en orden. Cada ejercicio tiene una misión comprensible, un
-resultado visible y una comprobación automática.
+Sigue las fichas en orden. Cada ejercicio tiene una misión comprensible y un
+resultado visible para compartir con el grupo.
 
 1. [Ponemos límites al encargo](exercises/01-alcance.md)
 2. [Dibujamos el mapa y elegimos qué mirar](exercises/02-mapa-y-muestra.md)

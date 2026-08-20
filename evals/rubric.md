@@ -1,7 +1,7 @@
 # Rúbrica de evaluación de las skills
 
-Puntúa cada dimensión de 0 a 2. La comprobación automática no sustituye esta
-conversación del equipo.
+Puntúa cada dimensión de 0 a 2. La automatización no sustituye esta conversación
+del equipo.
 
 | Dimensión | 0 | 1 | 2 |
 | --- | --- | --- | --- |

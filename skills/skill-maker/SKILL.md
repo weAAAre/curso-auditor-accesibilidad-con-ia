@@ -39,9 +39,8 @@ resultado sea verificable.
 1. Termina la conversación en la que la has creado y abre una limpia para
    comprobar que Codex o Claude Code la descubre mediante los enlaces ya
    preparados por `pnpm setup`.
-2. Pruébala con el caso demo y con un encargo incompleto.
-3. Ejecuta la comprobación del ejercicio.
-4. Revisa el resultado con `evals/rubric.md`.
-5. Corrige solamente el fallo observado; no añadas instrucciones especulativas.
+2. Pruébala con el encargo de clase y con un encargo incompleto.
+3. Revisa el resultado con `evals/rubric.md`.
+4. Corrige solamente el fallo observado; no añadas instrucciones especulativas.
 
 No ocultes preguntas abiertas, no inventes evidencia y no declares conformidad.

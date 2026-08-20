@@ -14,7 +14,6 @@
     "skills:check": "node scripts/sync-skills.mjs --check",
     "audit:validate": "node scripts/validate-audit.mjs",
     "audit:axe": "node scripts/run-axe.mjs",
-    "exercise:check": "node scripts/check-exercise.mjs",
     "format": "biome format --write .",
     "lint": "biome check .",
     "test": "node --test",

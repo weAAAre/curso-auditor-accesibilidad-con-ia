@@ -39,11 +39,5 @@ producto es suficientemente pequeño, decidid honestamente revisarlo entero.
 - ¿El producto es lo bastante grande como para que una muestra tenga sentido?
 - ¿Qué podría haber quedado fuera accidentalmente?
 
-## Comprobación
-
-```bash
-pnpm exercise:check 2 audits/class
-```
-
 **Extra:** pedid a otro equipo que critique vuestra selección sin ver cómo la
 construisteis. Si no puede entenderla, falta trazabilidad.

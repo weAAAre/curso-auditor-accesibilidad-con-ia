@@ -45,8 +45,3 @@ auditoría**, no un certificador automático de conformidad.
   autenticación.
 - No modifiques retrospectivamente estas reglas de manera automática: propón
   cambios y explica la evidencia que los justifica.
-
-## Comprobación final
-
-Antes de dar una tarea por terminada, ejecuta `pnpm check` y la comprobación del
-ejercicio correspondiente.

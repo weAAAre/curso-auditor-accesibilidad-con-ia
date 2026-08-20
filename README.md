@@ -27,8 +27,6 @@ agentes.
 ```bash
 pnpm install
 pnpm setup
-pnpm check
-pnpm test:axe
 ```
 
 Ejecuta esta preparación en tu terminal antes de abrir el agente. Codex o
@@ -37,18 +35,6 @@ el comando concreto del ejercicio, no una sesión con acceso total.
 
 Después abre esta carpeta con Codex o Claude Code y comienza por
 [`docs/exercises/01-alcance.md`](docs/exercises/01-alcance.md).
-
-## Comandos de apoyo
-
-```bash
-pnpm exercise:check 1 audits/class
-pnpm exercise:check 2 audits/class
-pnpm audit:axe audits/class
-pnpm exercise:check 3 audits/class
-```
-
-Si algo falla, el mensaje explica qué pieza falta. No hace falta abrir ni
-modificar los scripts.
 
 ## Mapa del repositorio
 

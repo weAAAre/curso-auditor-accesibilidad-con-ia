@@ -33,15 +33,6 @@ tomar buenas decisiones y reconoce la información que todavía falta.
 - ¿Qué información no tenemos todavía?
 - ¿Puede la ficha considerarse aprobada o debe seguir como borrador?
 
-## Comprobación
-
-```bash
-pnpm exercise:check 1 audits/class
-```
-
-El comando comprueba la forma del trabajo, no si las decisiones humanas son
-buenas. Para eso utilizad la rúbrica de `evals/rubric.md`.
-
 **Extra:** probad la skill con un encargo de una sola frase. Una buena skill no
 debería rellenar los huecos inventando datos.
 

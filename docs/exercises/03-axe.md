@@ -31,12 +31,5 @@ y explicar qué necesita revisión humana.
 - ¿Qué debería revisar después una persona?
 - ¿Podríamos repetir mañana la misma ejecución y saber qué cambió?
 
-## Ejecución y comprobación
-
-```bash
-pnpm audit:axe audits/class
-pnpm exercise:check 3 audits/class
-```
-
 **Extra:** elegid un resultado `incomplete` y redactad la pregunta de revisión
 humana, sin declarar todavía que existe un fallo.
